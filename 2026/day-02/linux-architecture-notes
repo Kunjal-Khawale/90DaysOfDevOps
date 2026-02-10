@@ -1,0 +1,111 @@
+Day 02 – Linux Architecture, Processes, and systemd
+Task
+Today’s goal is to understand how Linux works under the hood.
+1.The core components of Linux (kernel, user space, init/systemd)
+2.How processes are created and managed
+3.What systemd does and why it matters
+
+What is Linux?
+=> Linux is a open source operating system, developed by LINUS TORWALD in 1991.
+   Linux file system hierarch is starts with (/), which also called as root.
+   EveryThing in linux is either a file or a directory (folder).
+   EveryThing is starts with a process.
+
+1.The core components of Linux (kernel, user space, init/systemd)
+===  Architecture of Linux  ===
+   Linux is based on ASK architecture.
+   A- Application/User.
+      It is a graphical user interface (GUI) leval.
+      The Linux application layer (or user space) is the topmost level of the Linux architecture. 
+      In this layer user-interact with software, such as web browsers, desktop environments (GNOME, KDE), and terminal applications, operate.
+      
+   S- Shell
+      Shell is a command line interface (CLI).
+      it is the middle layer between application and kernal.
+      it interprets linux commands into OS(kernal) understandable language. 
+      Various linux distributions like Ubuntu, Fedora, cent os, etc come with a default shell (such as Bash) pre-installed to provide a command-line interface for the user.
+      
+   K- Kernal
+      Linux kernal is the heart of linux.
+      It was written in C language.
+      Even though linux kernal is written in C language, we can not directly interact with kernal.
+      Because kernal only accept structured system calls(0,1), not human-readeble commands.
+      Shell interprete tht user commands into system calls in background.
+
+   init/systemd -
+      This are the very first process that runs (assigned PID 1) once the Linux kernel loads. Its job is to "initialize" the system by 
+      starting background services (daemons) like networking, login screens, and database servers.
+      
+           Init (Traditional): Refers to the older standard, specifically SysVinit. It started services one after another (sequentially), 
+           which often made booting slower.
+           
+           systemd (Modern): The modern replacement for SysVinit, now used by default in almost all major distributions like Ubuntu, Fedora, and Debian. 
+           It starts many services at the same time (in parallel), leading to faster boot times.
+           
+2.How processes are created and managed?
+=> A process is an instance of a program that is currently executing.
+A program stored on disk becomes a process when it starts running.Each process is uniquely identified by a Process ID (PID).
+
+How a process is created (fork & exec)
+
+When a user runs a command, the shell asks the Linux kernel to create a new process using fork().
+fork() creates a child process, which is a copy of the parent process.
+After that, the child process uses exec() to load and run the required program.
+The child keeps the same PID but its memory is replaced with the new program.
+Once execution finishes, the process exits and releases system resources.
+
+Parent and child processes
+
+Linux processes follow a hierarchical structure.
+The process that creates another process is the parent, and the newly created one is the child.
+All processes are descendants of the first system process.
+If a parent process ends before the child, the child is adopted by the system’s first process.
+
+Process states
+
+During its lifetime, a process may be in different states:
+Running – executing on the CPU
+Sleeping – waiting for input or I/O
+Stopped – paused manually or by the system
+Terminated – finished execution
+These states help the kernel manage CPU and resources efficiently.
+
+Process scheduling and CPU usage
+
+The Linux kernel uses a scheduler to decide which process runs on the CPU.
+Each process is given a small time slice for execution.
+Fast switching between processes allows multiple processes to appear as if they are running at the same time.
+
+Process control and signals
+
+Linux manages processes using signals.
+Signals allow processes to be stopped, resumed, or terminated when required.
+They help control unresponsive or misbehaving processes.
+
+Role of systemd in process management
+
+systemd is the first user-space process started by the kernel and has PID 1.
+It starts system services, manages background processes, and monitors their health.
+If a service fails, systemd can automatically restart it.
+
+3.Understand how Linux works under the hood and What systemd does and why it matters ?
+=> Linux runs as a layered system where control gradually moves from hardware to user applications. When the system is powered on, 
+the firmware initializes the hardware and loads the bootloader, which is responsible for locating and loading the Linux kernel into memory. 
+Once loaded, the kernel takes full control of the system. The kernel is the core of Linux and is responsible for managing hardware resources, 
+memory, CPU scheduling, device drivers, and handling system calls from user programs. At this stage, only the kernel is running, and no user 
+services or applications are available.
+
+After the kernel initializes essential subsystems, it starts the first user-space process, which always has process ID 1. In modern Linux systems, 
+this process is systemd. systemd plays a critical role in bringing the system to a usable state. It is responsible for starting system services, 
+managing their dependencies, and ensuring they run in the correct order. systemd starts services in parallel wherever possible, which significantly 
+improves system boot time compared to older initialization systems. It also continuously monitors services during runtime and can automatically 
+restart them if they fail.
+
+In addition to service management, systemd controls the overall system state and handles system startup, shutdown, and reboot sequences. 
+It provides centralized logging for system and service events, which helps in tracking system behavior and diagnosing issues. 
+By managing long-running processes, handling dependencies, and maintaining system stability, systemd acts as the central manager of the 
+user-space environment. Together, the kernel and systemd form the foundation of a running Linux system, enabling user applications and services 
+to operate reliably on top of the hardware.
+      
+
+   

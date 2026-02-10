@@ -6,16 +6,16 @@ Today’s goal is to understand how Linux works under the hood.
 3.What systemd does and why it matters
 
 What is Linux?
-=> Linux is a open source operating system, developed by LINUS TORWALD in 1991.
-   Linux file system hierarch is starts with (/), which also called as root.
+=> Linux is an open source operating system, developed by LINUS TORWALD in 1991.
+   Linux file system hierarchy is starts with (/), which also called as root directory.
    EveryThing in linux is either a file or a directory (folder).
-   EveryThing is starts with a process.
+   EveryThing starts with a process in linux.
 
 1.The core components of Linux (kernel, user space, init/systemd)
 ===  Architecture of Linux  ===
    Linux is based on ASK architecture.
    A- Application/User.
-      It is a graphical user interface (GUI) leval.
+      This is the graphical user interface (GUI) leval.
       The Linux application layer (or user space) is the topmost level of the Linux architecture. 
       In this layer user-interact with software, such as web browsers, desktop environments (GNOME, KDE), and terminal applications, operate.
       
@@ -28,9 +28,9 @@ What is Linux?
    K- Kernal
       Linux kernal is the heart of linux.
       It was written in C language.
-      Even though linux kernal is written in C language, we can not directly interact with kernal.
-      Because kernal only accept structured system calls(0,1), not human-readeble commands.
-      Shell interprete tht user commands into system calls in background.
+      Even though linux kernal is written in C language, we can not directly interact with it.
+      The kernal only accept structured system calls(0,1), not human-readeble commands.
+      Shell translate the user commands into system calls in background.
 
    init/systemd -
       This are the very first process that runs (assigned PID 1) once the Linux kernel loads. Its job is to "initialize" the system by 
